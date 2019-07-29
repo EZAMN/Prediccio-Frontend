@@ -1,0 +1,16 @@
+.mapouter{
+  position:relative;
+  text-align:right;
+  height:150px;
+}
+
+.gmap_canvas {
+  overflow:hidden;
+  background:none!important;
+  height:150px;
+}
+
+div#mapDiv{
+  display:none;
+}
+div#mapDiv div.gm-style div:first-child{display:none;}

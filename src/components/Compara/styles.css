@@ -1,0 +1,81 @@
+.compare .wrapper ul{
+  float:left;
+  width:33%;
+  padding:0;
+}
+
+.compare .wrapper ul li{
+  background-color: #fff;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 13px 21px -5px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eee;
+  font-size: 18px; 
+  height:80px;
+  margin: 0;
+  padding: 0;
+  border:0;
+  border-top: 1px solid #dee2e6;
+  border-radius: 0;}
+.compare .wrapper .bg-red {
+  background-color: #ff715b; }
+.compare .wrapper .bg-green {
+  background-color: #48cfad; }
+.compare .wrapper .bg-blue {
+  background-color: #0197F6; }
+.compare .wrapper ul > li{
+  padding-top: 25px;
+  padding-bottom: 25px;
+  text-align: center; }
+.compare .wrapper li[scope="row"] {
+  font-size: 20px;
+  color: #393c45;
+  font-weight: normal;
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  text-align: left;
+  padding-left: 45px; }
+.compare .wrapper ul.condition {
+  color: #fff;
+  font-size: 20px; }
+.compare .wrapper ul.colors span {
+  height: 20px;
+  width: 20px;
+  display: inline-block;
+  margin-right: 5px;
+  border-radius: 100%; }
+.compare .wrapper thead th {
+  font-size: 20px;
+  color: #393c45;
+  font-weight: normal; }
+
+.compare .thead-default th {
+  background-color: #fff; }
+
+  .compare .wrapper ul.tags li{
+    text-align:left;
+    padding-left:45px;
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+  }
+  .compare .wrapper ul li:first-child{
+    background-color: #fff;
+    border:0;
+    margin-bottom:5px;
+    border-bottom: 1px solid #dee2e6;
+    border-top: 1px solid #dee2e6;
+    height:100px;
+  }
+  .compare .wrapper ul:first-child li{
+    border-left: 1px solid #dee2e6;
+  }
+  .compare .wrapper ul:last-child li{
+    border-right: 1px solid #dee2e6;
+  }
+  .compare .wrapper ul li img{
+    width:50px;
+    height:50px;
+  }
+  .compare .wrapper ul li button{
+    margin:0 5px;
+  }
