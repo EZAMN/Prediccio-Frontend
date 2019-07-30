@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import './styles.css'
 import Mapa from '../Mapa'
-import literals from '../../config/literals.js' //Carrega la llista de literals per seprar-ho tot el text i donar opcio a traduccions
+import literals from '../../config/literals' //Carrega la llista de literals per seprar-ho tot el text i donar opcio a traduccions
 
 
 //Component per mostrar un municipi de la llista, gestiona els events de click per a comparar i deixar de comparar
