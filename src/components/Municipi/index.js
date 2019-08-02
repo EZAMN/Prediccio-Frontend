@@ -1,56 +1,34 @@
-import React, {Component} from 'react'
-import './styles.css'
-import Mapa from '../Mapa'
-import literals from '../../config/literals' //Carrega la llista de literals per seprar-ho tot el text i donar opcio a traduccions
+import React, {Component} from 'react';
+import Mapa from '../Mapa';
+import literals from '../../config/literals'; //Carrega la llista de literals per seprar-ho tot el text i donar opcio a traduccions
+import './styles.css';
 
 
 //Component per mostrar un municipi de la llista, gestiona els events de click per a comparar i deixar de comparar
 class Municipi extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            comparing:false
-        };
-        this.clickButton = this.clickButton.bind(this);
-    }
-
     //Crida la funcio de municipisList adient per a cada event, canvia l'estat de comparant en funcio del que retorni aquesta funcio
     clickButton() {
-        if(this.state.comparing === true){
-            if(this.props.removeMunicipi() === true){
-                this.toggleCompare();
-            }
-        }else{
-            if(this.props.compareMunicipi() === true){
-                this.toggleCompare();
-            }
-        }
-    }
-
-    //Funcio per canviar l'estat de comparing
-    toggleCompare(){
-        this.setState({
-            comparing: !this.state.comparing
-        });
+        if(this.props.compared)
+            this.props.removeMunicipi();
+        else
+            this.props.compareMunicipi(); 
     }
 
     //Es mostra un mapa amb les coordenades de cada municipi a metode informatiu
     //El boto mostra "comparar" o "treu" en funcio del seu estat
     render() {
         const municipi = this.props.municipi;
-        const comparing = this.state.comparing ? "compare" : ""
-        const classe = `municipi ${comparing}`;
+        const textButton = this.props.compared ? literals.treu : literals.compara
+        const comparingClass = this.props.compared ? "compare" : ""
+        const classe = `municipi ${comparingClass}`;
 
         return (
-        <li key={municipi.codi} className="col-sm-6 col-md-3" onClick={this.clickButton}>
+        <li key={municipi.codi} className="col-sm-6 col-md-3" onClick={() => this.clickButton()}>
             <div className={classe} >
                 <Mapa coordenades={municipi.coordenades} />
                 <div className="image_overlay"/>
-                <div className="view_details">
-                {this.state.comparing ? literals.treu : literals.compara}
-                </div>
+                <div className="view_details">{textButton}</div>
                 <div className="stats">
                     <div className="stats-container">
                         <span className="municipi_name">{municipi.nom}</span>
@@ -59,7 +37,8 @@ class Municipi extends Component {
                     </div>
                 </div>
             </div>
-        </li>)
+        </li>
+        );
     }
 }
 

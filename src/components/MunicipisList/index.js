@@ -1,117 +1,60 @@
-import React, {Component} from 'react'
-import Municipi from '../Municipi'
-import Compara from '../../components/Compara'
-import './styles.css'
-import config from '../../config'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import Municipi from '../Municipi';
+import { buildMunicipis, selectMunicipi, unselectMunicipi } from '../../actions';
+import './styles.css';
+
 
 //Component que mostra la llista de municipis i la zona de comparacio. 
 //Gestiona tota la logica de quins municipis es comparen i es mostren a la comparacio
 class MunicipisList extends Component {
 
-  constructor(props) {
-    super(props);
-
-    //Guarda en aquesta variable la URL del servidor tret de l'arxiu de config
-    this.apiUrl = JSON.parse(config.Config).serverUrl + '/municipis/metadades';
-    
-    this.state = {
-      error: null,
-      isLoaded: false,
-      municipis: [],
-      compared:{
-        item1: undefined,
-        item2: undefined
-      }
-    };
-  }
-
   //Al haver carregat el component, s'extreu la llista de municipis del server
   componentDidMount() {
-    this.getMunicipis()
+    this.props.buildMunicipis()
   }
-
-  //Crida al server, guarda els municipis a l'state per a que es renderitzi tot altre cop
-  getMunicipis(){
-    fetch(this.apiUrl)
-      .then(response => response.json())
-      .then(
-        (result) => {
-          this.setState({
-            isLoaded: true,
-            municipis: result
-          });
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error: error
-          });
-        }
-      )
-  } 
 
   //Funcio per deixar de comparar un municipi
   removeMunicipi(codi) {
-    this.setState({compared: this.treuMunicipi(codi)});
-    return true;
-  }
-
-  //Retorna l'objecte compared sense el municipi a treure, probablement seria mes senzill haver-ho fet amb un array en comptes de item1 item2
-  treuMunicipi(codi) {
-    let key, nouCompared = this.state.compared;
-
-    for (key in nouCompared) {
-      if(nouCompared[key] !== undefined && nouCompared[key].codi === codi){
-        nouCompared[key] = undefined;
-      }
-    }
-
-    return nouCompared
+    this.props.unselectMunicipi(codi);
   }
 
   //S'afageix el municipi desitjat a l'objecte de comparacions, altre cop en un array hauria set mes senzill i entenedor
   compareMunicipi(municipi) {
-    if(this.state.compared.item1 === undefined){
-      this.setState({
-        compared: {
-          item1: municipi,
-          item2: this.state.compared.item2
-        }
-      }); 
-      return true;
-    }else{
-      if(this.state.compared.item2 === undefined){
-        this.setState({
-          compared: {
-            item1: this.state.compared.item1,
-            item2: municipi
-          }
-        });
-        return true;
-      }
-    }
-    return false;
+    if(this.props.compared.length <= 1)
+      this.props.selectMunicipi(municipi);
+  }
+
+  compared(municipi) {
+    const found = this.props.compared.find((compared) => { return compared.codi === municipi.codi});
+    const sestaComparant = found !== undefined;
+    return sestaComparant;
   }
 
   render() {
-    let municipis = this.state.municipis;
-
     return (
       <section className="municipisList">
         <ul className="row mt-3">
-        {municipis.map(municipi =>
+        {this.props.municipis.map(municipi =>
           <Municipi 
             key={municipi.codi} 
             municipi={municipi} 
             compareMunicipi={(e) => this.compareMunicipi(municipi, e)} 
-            removeMunicipi={(e) => this.removeMunicipi(municipi.codi, e)} />
+            removeMunicipi={(e) => this.removeMunicipi(municipi.codi, e)} 
+            compared={this.compared(municipi)} />
         )}
         </ul>
-        <Compara compared={this.state.compared}/>
       </section>
     )
   }
 
 }
 
-export default MunicipisList
+const mapStateToProps = (state) => {
+  return { municipis: state.municipis, compared: state.selected }
+}
+
+export default connect(
+    mapStateToProps,
+    { buildMunicipis, selectMunicipi, unselectMunicipi }
+  )(MunicipisList);

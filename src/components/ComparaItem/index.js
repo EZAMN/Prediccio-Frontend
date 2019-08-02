@@ -1,109 +1,96 @@
-import React, {Component} from 'react'
-import moment from 'moment'
-import config from '../../config'
-import nomImatge from '../../config/imatges.js'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import nomImatge from '../../config/imatges.js';
+import DatesButton from './DatesButton';
+import { predict, selectDate } from '../../actions';
 
 
 //Component per a mostrar el municipi comparat
-//Gestiona la peticio al servidor per a les dades exteses i de prediccions del municipi requerit
-//Gestiona el canvi de dates a partir de les dades extretes del servidor
+//Gestiona la peticio al servidor per a les dates exteses i de prediccions del municipi requerit
+//Gestiona el canvi de dates a partir de les dates extretes del servidor
 class ComparaItem extends Component {
-
-  constructor(props) {
-    super(props);
-
-    //es guarda la url del servidor extreta de l'arxiu de config
-    this.apiUrl = JSON.parse(config.Config).serverUrl + '/municipis/';
-    
-    this.state = {
-      dades: {},
-      variables: {}
-    };
-  }
-
-  //Al muntarse el component es imposible que ja tingui un municipi, pero per si es canvies la funcionalitat de l'aplicacio, no costa res intentar la crida de prediccions
-  componentDidMount() {
-    this.getDades(this.props.municipi)
-  }
 
   //A l'actualitzar el municipi, si te municipi i no es el mateix que abans del canvi es demanen les prediccions al servidor
   componentDidUpdate(prevProps) {
+
     if (this.props.municipi !== undefined 
+      && this.props.municipi.codi !== undefined
       && ( prevProps.municipi === undefined 
         || this.props.municipi.codi !== prevProps.municipi.codi )) {
-      this.getDades(this.props.municipi);
+
+          this.props.predict(this.props.municipi.codi);
+
     }
+
   }
 
-  //Si es disposa de municipi es criden les dades de prediccio al servidor, es guarden totes les dades, i s'implementen els de la primera data, es podria canviar a l'ultima per tenir les dades mes actuals
-  getDades(municipi){
-    if(municipi !== undefined){
-      let url = this.apiUrl + municipi.codi
-      fetch(url)
-        .then(response => response.json())
-        .then(
-          (result) => {
-            result.prediccions.dies[0].variables.disabled = true;
-            this.setState({
-              isLoaded: true,
-              dades: result,
-              variables: result.prediccions.dies[0].variables
-            });
-          },
-          (error) => {
-            this.setState({
-              isLoaded: true,
-              error: error
-            });
-          }
-        )
-    }
-  } 
-
-  //Funcio per a canviar la data que es mostra, s'actualitzen les dades i es canvia l'estat dels botons (disabled o no)
+  //Funcio per a canviar la data que es mostra, s'actualitzen les dates i es canvia l'estat dels botons (disabled o no)
   //Es podria fer un component per tenir els botons de dates en comptes de renderitzarlos aqui
-  seleccionaData(variables) {
-    let novesDades = this.state.dades;
-    novesDades.prediccions.dies[0].variables.disabled = !novesDades.prediccions.dies[0].variables.disabled
-    novesDades.prediccions.dies[1].variables.disabled = !novesDades.prediccions.dies[1].variables.disabled
+  seleccionaData(codi, date) {
 
-    this.setState({
-      variables:variables,
-      dades:novesDades
-    });
+    const newDate = {
+      codi: codi,
+      ...date
+    }
+
+    this.props.selectDate(newDate);
   }
 
-  //Es guarden les dades de les que es disposa en variables i es mostra l'objecte amb aquestes variables.
+  renderMunicipi(municipi){
+    return [municipi.nom, municipi.comarca.nom];
+  }
+
+  renderValues(variables){
+
+    const alt = nomImatge[variables.estatCel.simbol + 'alt']
+    const src = 'images/' + nomImatge[variables.estatCel.simbol]
+    const tmax = variables.tmax.valor + " " + variables.tmax.unitats;
+    const tmin = variables.tmin.valor + " " + variables.tmin.unitats;
+    const precipitacio = variables.precipitacio.valor + " " + variables.precipitacio.unitat;
+    
+    return [ alt, src, tmax, tmin, precipitacio]
+  }
+
+  renderPrediccions(prediccions, selectedData){
+
+    const botons = prediccions.dies.map( (prediccio) => {
+    
+      return <DatesButton
+        data={prediccio.data}
+        onClick={() => this.seleccionaData(prediccions.codi, prediccio)} 
+        disabled={ prediccio.data === selectedData.data } 
+        />
+
+    });
+    
+    return botons;
+  }
+
+  //Es guarden les dates de les que es disposa en prediccions i es mostra l'objecte amb aquestes prediccions.
   //Es podria fer un component per tenir els botons de dates en comptes de renderitzarlos aqui
   render() {
-    let municipi = this.props.municipi;
-    let variables = this.state.variables;
-    let dades = this.state.dades;
-    let alt = '', nom, comarca, tmax, tmin, precipitacio, data1, data2, variables1, variables2, btn1, btn2
-    let src = 'images/empty.png'
+    const municipi = this.props.municipi;
+    const prediccions = this.props.prediccions.find((prediccio)=>{ return prediccio.codi === municipi.codi }); 
+    const selectedData = this.props.dates.find((prediccio)=>{ return prediccio.codi === municipi.codi }); 
 
-    if(variables !== undefined && municipi !== undefined && variables.estatCel !== undefined){
-      alt = nomImatge[variables.estatCel.simbol + 'alt']
-      src = 'images/' + nomImatge[variables.estatCel.simbol]
-      tmax = variables.tmax.valor + " " + variables.tmax.unitats;
-      tmin = variables.tmin.valor + " " + variables.tmin.unitats;
-      precipitacio = variables.precipitacio.valor + " " + variables.precipitacio.unitat;
-    }
+    const municipiExists = (municipi !== undefined && municipi.codi !== undefined);
+    const prediccionsExists = (prediccions !== undefined && prediccions.prediccions !== undefined);
+    const dataExists = (selectedData !== undefined && selectedData.variables !== undefined);
 
-    if(dades !== undefined && municipi !== undefined && dades.prediccions !== undefined) {
-      data1 = moment(dades.prediccions.dies[0].data).format('DD/MM/YYYY');
-      variables1 = dades.prediccions.dies[0].variables
-      data2 = moment(dades.prediccions.dies[1].data).format('DD/MM/YYYY');
-      variables2 = dades.prediccions.dies[1].variables
-      btn1 = <button type="button" className="btn btn-info" onClick={e => this.seleccionaData(variables1)} disabled={variables1.disabled} >{data1}</button>
-      btn2 = <button type="button" className="btn btn-info" onClick={e => this.seleccionaData(variables2)} disabled={variables2.disabled}>{data2}</button>
-    }
+    let alt = '', nom, comarca, tmax, tmin, precipitacio, btn1, btn2;
+    let src = 'images/empty.png';
 
-    if(municipi !== undefined){
-      nom = municipi.nom;
-      comarca = municipi.comarca.nom;
-    }
+    if(municipiExists){
+      [ nom, comarca ] = this.renderMunicipi(municipi);
+
+      if(prediccionsExists) 
+        [ btn1, btn2 ] = this.renderPrediccions(prediccions.prediccions, selectedData);
+
+      if(dataExists)
+        [ alt, src, tmax, tmin, precipitacio ] = this.renderValues(selectedData.variables);
       
+    }
+
     return (
       <ul className="col-sm">
         <li>
@@ -124,4 +111,8 @@ class ComparaItem extends Component {
 
 }
 
-export default ComparaItem
+const mapStateToProps = (state) => {
+  return { prediccions: state.prediccions, dates: state.dates }
+};
+
+export default connect( mapStateToProps, { predict, selectDate } )(ComparaItem);
