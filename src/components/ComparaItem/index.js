@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import nomImatge from '../../config/imatges.js';
 import DatesButton from './DatesButton';
 import { predict, selectDate } from '../../actions';
+import './styles.css'
 
 
 //Component per a mostrar el municipi comparat

@@ -1,0 +1,14 @@
+.btn.btn-info{
+    border-color:#3eaf7a;
+    background-color:#48cfad;
+}
+
+.btn.btn-info:hover{
+    border-color:#229c7e;
+    background-color:#28af8d;
+}
+
+.btn.btn-info:disabled{
+    border-color:#666;
+    background-color:#999;
+}
