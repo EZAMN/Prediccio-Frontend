@@ -24,7 +24,7 @@
   "scripts": {
     "start": "NODE_ENV=production react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "./node_modules/mocha/bin/mocha --require babel-core/register src/test/components",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
