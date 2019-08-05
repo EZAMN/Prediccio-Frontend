@@ -1,4 +1,5 @@
 import { getMunicipis, getPrediccio } from '../api';
+import { BUILD_MUNICIPIS, SELECT_MUNICIPI, UNSELECT_MUNICIPI, PREDICT_MUNICIPI, SELECT_DATE } from './types';
 
 
 export const buildMunicipis = () => { return async (dispatch) => {
@@ -7,7 +8,7 @@ export const buildMunicipis = () => { return async (dispatch) => {
     //TODO controlar errors
 
         dispatch({
-            type: "BUILD_MUNICIPIS",
+            type: BUILD_MUNICIPIS,
             payload: response
         });
     };
@@ -15,14 +16,14 @@ export const buildMunicipis = () => { return async (dispatch) => {
 
 export const selectMunicipi = (municipi) => {
     return {
-        type: "SELECT_MUNICIPI",
+        type: SELECT_MUNICIPI,
         payload: municipi
     };
 };
 
 export const unselectMunicipi = (municipi) => {
     return {
-        type: "UNSELECT_MUNICIPI",
+        type: UNSELECT_MUNICIPI,
         payload: municipi
     };
 };
@@ -33,7 +34,7 @@ export const predict = (codiMunicipi) => { return async (dispatch) => {
     //TODO controlar errors
 
         dispatch({
-            type: "PREDICT_MUNICIPI",
+            type: PREDICT_MUNICIPI,
             payload: response
         });
     };
@@ -41,7 +42,7 @@ export const predict = (codiMunicipi) => { return async (dispatch) => {
 
 export const selectDate = (date) => {
     return {
-        type: "SELECT_DATE",
+        type: SELECT_DATE,
         payload: date
     };
 };

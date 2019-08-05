@@ -1,13 +1,15 @@
+import { SELECT_DATE, PREDICT_MUNICIPI } from '../../actions/types';
+
 const selectDate = (state = [], action) => {
 
     switch(action.type){
 
-        case 'SELECT_DATE':
+        case SELECT_DATE:
 
             const filteredState = state.filter((prediccio)=>{ return prediccio.codi !== action.payload.codi });
             return [...filteredState, action.payload];
 
-        case 'PREDICT_MUNICIPI':
+        case PREDICT_MUNICIPI:
 
             const newDate = {
                 codi: action.payload.codi,
