@@ -44,7 +44,7 @@ class ComparaItem extends Component {
   renderValues(variables){
 
     const alt = nomImatge[variables.estatCel.simbol + 'alt']
-    const src = 'images/' + nomImatge[variables.estatCel.simbol]
+    const src = '/images/' + nomImatge[variables.estatCel.simbol]
     const tmax = variables.tmax.valor + " " + variables.tmax.unitats;
     const tmin = variables.tmin.valor + " " + variables.tmin.unitats;
     const precipitacio = variables.precipitacio.valor + " " + variables.precipitacio.unitat;

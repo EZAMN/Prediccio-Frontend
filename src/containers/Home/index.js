@@ -7,7 +7,7 @@ class Home extends Component {
   render() {
     return (
       <div className="home mt-5">
-        <MunicipisList />
+        <MunicipisList {...this.props.match.params} />
         <Compara />
       </div>
     )

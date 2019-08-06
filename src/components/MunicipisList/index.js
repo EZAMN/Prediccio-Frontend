@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Municipi from '../Municipi';
 import { buildMunicipis, selectMunicipi, unselectMunicipi } from '../../actions';
+import history from '../../history';
 import './styles.css';
 
 
@@ -10,8 +11,15 @@ import './styles.css';
 class MunicipisList extends Component {
 
   //Al haver carregat el component, s'extreu la llista de municipis del server
-  componentDidMount() {
-    this.props.buildMunicipis()
+  async componentDidMount() {
+    await this.props.buildMunicipis();
+
+    if(typeof this.props.codi1 !== 'undefined')
+      this.compareMunicipi(this.props.municipis.find(municipi => municipi.codi === this.props.codi1));
+      
+    if(typeof this.props.codi2 !== 'undefined')
+      this.compareMunicipi(this.props.municipis.find(municipi => municipi.codi === this.props.codi2));
+    
   }
 
   //Funcio per deixar de comparar un municipi
@@ -20,15 +28,24 @@ class MunicipisList extends Component {
   }
 
   //S'afageix el municipi desitjat a l'objecte de comparacions, altre cop en un array hauria set mes senzill i entenedor
-  compareMunicipi(municipi) {
-    if(this.props.compared.length <= 1)
-      this.props.selectMunicipi(municipi);
+  async compareMunicipi(municipi) {
+    if(this.props.compared.length <= 1){
+      await this.props.selectMunicipi(municipi);
+
+      let url = '';
+
+      if(typeof this.props.codi1 !== 'undefined')
+        url = `/${this.props.codi1}`;
+
+      url += `/${municipi.codi}`;
+      history.push(url);
+      
+    }
   }
 
-  compared(municipi) {
+  isBeingCompared(municipi) {
     const found = this.props.compared.find((compared) => { return compared.codi === municipi.codi});
-    const sestaComparant = found !== undefined;
-    return sestaComparant;
+    return found !== undefined;
   }
 
   render() {
@@ -41,7 +58,8 @@ class MunicipisList extends Component {
             municipi={municipi} 
             compareMunicipi={(e) => this.compareMunicipi(municipi, e)} 
             removeMunicipi={(e) => this.removeMunicipi(municipi.codi, e)} 
-            compared={this.compared(municipi)} />
+            compared={this.isBeingCompared(municipi)} 
+            disabled={this.props.compared.length >= 2}/>
         )}
         </ul>
       </section>
