@@ -1,21 +1,18 @@
-import { SELECT_DATE, PREDICT_MUNICIPI } from '../../actions/types';
+import { SELECT_DATE, PREDICT_MUNICIPI, UNSELECT_MUNICIPI } from '../../actions/types';
 
-const selectDate = (state = [], action) => {
+const selectDate = (state = {}, action) => {
 
     switch(action.type){
 
         case SELECT_DATE:
-
-            const filteredState = state.filter((prediccio)=>{ return prediccio.codi !== action.payload.codi });
-            return [...filteredState, action.payload];
+            return {...state, [action.payload.codi]: action.payload};
 
         case PREDICT_MUNICIPI:
+            return {...state, [action.payload.codi]: action.payload.prediccions.dies[0]};
 
-            const newDate = {
-                codi: action.payload.codi,
-                ...action.payload.prediccions.dies[0]
-            }
-            return [...state, newDate];
+        case UNSELECT_MUNICIPI:
+            const { [action.payload]:id, ...newState} = state;
+            return newState;
 
         default:
             return state;

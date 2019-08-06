@@ -71,8 +71,8 @@ class ComparaItem extends Component {
   //Es podria fer un component per tenir els botons de dates en comptes de renderitzarlos aqui
   render() {
     const municipi = this.props.municipi;
-    const prediccions = this.props.prediccions.find((prediccio)=>{ return prediccio.codi === municipi.codi }); 
-    const selectedData = this.props.dates.find((prediccio)=>{ return prediccio.codi === municipi.codi }); 
+    const prediccions = this.props.prediccions[municipi.codi]; 
+    const selectedData = this.props.dates[municipi.codi]; 
 
     const municipiExists = (municipi !== undefined && municipi.codi !== undefined);
     const prediccionsExists = (prediccions !== undefined && prediccions.prediccions !== undefined);

@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
-import select from './selectMunicipi';
-import build from './buildMunicipis';
-import predict from './predictMunicipi';
+import selectMunicipi from './selectMunicipi';
+import buildMunicipis from './buildMunicipis';
+import predictMunicipi from './predictMunicipi';
 import selectDate from './selectDate';
 
 export default combineReducers({
-    selected: select,
-    municipis: build,
-    prediccions: predict,
+    selected: selectMunicipi,
+    municipis: buildMunicipis,
+    prediccions: predictMunicipi,
     dates: selectDate
 });
