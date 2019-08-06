@@ -23,8 +23,19 @@ class MunicipisList extends Component {
   }
 
   //Funcio per deixar de comparar un municipi
-  removeMunicipi(codi) {
-    this.props.unselectMunicipi(codi);
+  async removeMunicipi(codi) {
+    await this.props.unselectMunicipi(codi);
+    
+    let url = '';
+
+    if(typeof this.props.codi1 !== 'undefined' && codi !== this.props.codi1)
+      url = `/${this.props.codi1}`;
+
+    if(typeof this.props.codi2 !== 'undefined' && codi !== this.props.codi2)
+      url = `/${this.props.codi2}`;
+
+      console.log('url', url)
+    history.push(url);
   }
 
   //S'afageix el municipi desitjat a l'objecte de comparacions, altre cop en un array hauria set mes senzill i entenedor
@@ -37,8 +48,10 @@ class MunicipisList extends Component {
       if(typeof this.props.codi1 !== 'undefined')
         url = `/${this.props.codi1}`;
 
-      url += `/${municipi.codi}`;
-      history.push(url);
+      if(municipi.codi !== this.props.codi1){
+        url += `/${municipi.codi}`;
+        history.push(url);
+      }
       
     }
   }
