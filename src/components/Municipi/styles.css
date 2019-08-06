@@ -7,6 +7,9 @@
   transition: all 500ms ease-out;
   margin-bottom: 30px;
   border: 1px solid #ddd; }
+.municipi.ple {
+  cursor:default;
+}
   .municipi:hover {
     box-shadow: 0 13px 21px -5px rgba(0, 0, 0, 0.2); }
     .municipi:hover .image_overlay {
@@ -50,6 +53,9 @@
     background: #48cfad;
     opacity: 0;
     transition: all 200ms ease-out; }
+  .municipi.ple .image_overlay {
+    background-color: #666;
+  }
   .municipi .view_details {
     position: absolute;
     top: 82px;
@@ -69,3 +75,6 @@
       background: #fff;
       color: #48cfad;
       cursor: pointer; }
+    .municipi.ple .view_details:hover {
+      cursor:default;
+    }

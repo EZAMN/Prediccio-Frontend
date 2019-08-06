@@ -19,9 +19,15 @@ class Municipi extends Component {
     //El boto mostra "comparar" o "treu" en funcio del seu estat
     render() {
         const municipi = this.props.municipi;
-        const textButton = this.props.compared ? literals.treu : literals.compara
-        const comparingClass = this.props.compared ? "compare" : ""
-        const classe = `municipi ${comparingClass}`;
+        let comparingClass = this.props.compared ? "compare" : ""
+        let textButton = this.props.compared ? literals.treu : literals.compara
+
+        if(this.props.disabled && !this.props.compared){
+            textButton = literals.ple;
+            comparingClass = "ple";
+        }
+        
+        const classe = `municipi ${comparingClass}`;    
 
         return (
         <li key={municipi.codi} className="col-sm-6 col-md-3" onClick={() => this.clickButton()}>

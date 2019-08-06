@@ -2,6 +2,7 @@
 var literals = {
     "header": "Compara prediccions meteorològiques de municipis",
     "treu": "Treu",
+    "ple": "Ple",
     "compara": "Compara",
     "comarca":"Comarca",
     "estat": "Estat",
