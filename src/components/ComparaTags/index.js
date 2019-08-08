@@ -3,7 +3,7 @@ import literals from '../../config/literals' //Carrega la llista de literals per
 
 
 //Component per a mostrar les etiquetes de la comparacio
-const ComparaTags = props => (
+const ComparaTags = () => (
   <ul className="col-sm tags">
     <li></li>
     <li>{literals.comarca}</li>
