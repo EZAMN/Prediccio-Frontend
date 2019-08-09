@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import nomImatge from '../../config/imatges.js';
+import nomImatge from '../../../config/imatges.js';
 import DatesButton from './DatesButton';
-import { predict, selectDate } from '../../actions';
+import { predict, selectDate } from '../../../actions';
 import './styles.css'
 
 

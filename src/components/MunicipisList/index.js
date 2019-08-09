@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Municipi from '../Municipi';
+import Municipi from './Municipi';
 import { buildMunicipis, selectMunicipi, unselectMunicipi } from '../../actions';
 import history from '../../history';
 import './styles.css';

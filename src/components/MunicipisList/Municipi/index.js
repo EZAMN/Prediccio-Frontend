@@ -1,6 +1,6 @@
 import React from 'react';
-import Mapa from '../Mapa';
-import literals from '../../config/literals'; //Carrega la llista de literals per seprar-ho tot el text i donar opcio a traduccions
+import Mapa from './Mapa';
+import literals from '../../../config/literals'; //Carrega la llista de literals per seprar-ho tot el text i donar opcio a traduccions
 import './styles.css';
 
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 import ComparaTags from '../ComparaTags'
-import ComparaItem from '../ComparaItem'
+import ComparaItem from './ComparaItem'
 import './styles.css'
 
 //Component que mostra la seccio de comparacio, les etiquetes i els dos municipis comparats
