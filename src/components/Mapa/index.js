@@ -4,10 +4,10 @@ import './styles.css'
 
 //Component per a mostrar el mapa de la situacio del municipi
 //es crida un iframe de google maps amb una query de la latitud i longitud extretes de les metadades
-const Mapa = (props) => {
+const Mapa = ({ coordenades }) => {
     
-    let lat = props.coordenades.latitud;
-    let long = props.coordenades.longitud;
+    let lat = coordenades.latitud;
+    let long = coordenades.longitud;
     var src = `https://maps.google.com/maps?q=${lat},${long}&t=&z=9&ie=UTF8&iwloc=&output=embed`
 
     return (
