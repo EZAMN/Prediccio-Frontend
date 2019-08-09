@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import Municipi from '../Municipi';
 import { buildMunicipis, selectMunicipi, unselectMunicipi } from '../../actions';
@@ -8,47 +8,48 @@ import './styles.css';
 
 //Component que mostra la llista de municipis i la zona de comparacio. 
 //Gestiona tota la logica de quins municipis es comparen i es mostren a la comparacio
-class MunicipisList extends Component {
+const MunicipisList = (props) => {
+
+  useEffect( () => { getMunicipis(); }, [] );
+  useEffect( () => { predictUrlMunicipis(props.codi1); }, [props.municipis, props.codi1] );
+  useEffect( () => { predictUrlMunicipis(props.codi2); }, [props.municipis, props.codi2] );
 
   //Al haver carregat el component, s'extreu la llista de municipis del server
-  async componentDidMount() {
-    await this.props.buildMunicipis();
+  const getMunicipis = () => {
+    props.buildMunicipis(); 
+  }
 
-    if(typeof this.props.codi1 !== 'undefined')
-      this.compareMunicipi(this.props.municipis.find(municipi => municipi.codi === this.props.codi1));
-      
-    if(typeof this.props.codi2 !== 'undefined')
-      this.compareMunicipi(this.props.municipis.find(municipi => municipi.codi === this.props.codi2));
-    
+  const predictUrlMunicipis = (codi) => {
+    if(typeof codi !== 'undefined' && props.municipis.length > 0 && !isBeingCompared(codi))
+      compareMunicipi(props.municipis.find(municipi => municipi.codi === codi));
   }
 
   //Funcio per deixar de comparar un municipi
-  async removeMunicipi(codi) {
-    await this.props.unselectMunicipi(codi);
+  const removeMunicipi = async (codi) => {
+    await props.unselectMunicipi(codi);
     
     let url = '';
 
-    if(typeof this.props.codi1 !== 'undefined' && codi !== this.props.codi1)
-      url = `/${this.props.codi1}`;
+    if(typeof props.codi1 !== 'undefined' && codi !== props.codi1)
+      url = `/${props.codi1}`;
 
-    if(typeof this.props.codi2 !== 'undefined' && codi !== this.props.codi2)
-      url = `/${this.props.codi2}`;
+    if(typeof props.codi2 !== 'undefined' && codi !== props.codi2)
+      url = `/${props.codi2}`;
 
-      console.log('url', url)
     history.push(url);
   }
 
   //S'afageix el municipi desitjat a l'objecte de comparacions, altre cop en un array hauria set mes senzill i entenedor
-  async compareMunicipi(municipi) {
-    if(this.props.compared.length <= 1){
-      await this.props.selectMunicipi(municipi);
+  const compareMunicipi = async (municipi) => {
+    if(props.compared.length <= 1){
+      await props.selectMunicipi(municipi);
 
       let url = '';
 
-      if(typeof this.props.codi1 !== 'undefined')
-        url = `/${this.props.codi1}`;
+      if(typeof props.codi1 !== 'undefined')
+        url = `/${props.codi1}`;
 
-      if(municipi.codi !== this.props.codi1){
+      if(municipi.codi !== props.codi1){
         url += `/${municipi.codi}`;
         history.push(url);
       }
@@ -56,28 +57,26 @@ class MunicipisList extends Component {
     }
   }
 
-  isBeingCompared(municipi) {
-    const found = this.props.compared.find((compared) => { return compared.codi === municipi.codi});
+  const isBeingCompared = (codi) => {
+    const found = props.compared.find((compared) => { return compared.codi === codi});
     return found !== undefined;
   }
 
-  render() {
-    return (
-      <section className="municipisList">
-        <ul className="row mt-3">
-        {this.props.municipis.map(municipi =>
-          <Municipi 
-            key={municipi.codi} 
-            municipi={municipi} 
-            compareMunicipi={(e) => this.compareMunicipi(municipi, e)} 
-            removeMunicipi={(e) => this.removeMunicipi(municipi.codi, e)} 
-            compared={this.isBeingCompared(municipi)} 
-            disabled={this.props.compared.length >= 2}/>
-        )}
-        </ul>
-      </section>
-    )
-  }
+  return (
+    <section className="municipisList">
+      <ul className="row mt-3">
+      {props.municipis.map(municipi =>
+        <Municipi 
+          key={municipi.codi} 
+          municipi={municipi} 
+          compareMunicipi={() => compareMunicipi(municipi)} 
+          removeMunicipi={() => removeMunicipi(municipi.codi)} 
+          compared={isBeingCompared(municipi.codi)} 
+          disabled={props.compared.length >= 2}/>
+      )}
+      </ul>
+    </section>
+  )
 
 }
 
