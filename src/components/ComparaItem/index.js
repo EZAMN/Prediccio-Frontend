@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import nomImatge from '../../config/imatges.js';
 import DatesButton from './DatesButton';
 import { predict, selectDate } from '../../actions';
@@ -12,12 +12,16 @@ import './styles.css'
 const ComparaItem = (props) => {
 
   useEffect( () => { predictMunicipi(props.municipi) }, [props.municipi] );
+  const municipi = props.municipi;
+  const prediccions = useSelector(state => state.prediccions[municipi.codi]);
+  const selectedData = useSelector(state => state.dates[municipi.codi]);
+  const dispatch = useDispatch();
 
   //A l'actualitzar el municipi, si te municipi i no es el mateix que abans del canvi es demanen les prediccions al servidor
   const predictMunicipi = (municipi) => {
 
     if (typeof municipi.codi !== 'undefined') 
-          props.predict(municipi.codi);
+          dispatch(predict(municipi.codi));
 
   }
 
@@ -30,7 +34,7 @@ const ComparaItem = (props) => {
       ...date
     }
 
-    props.selectDate(newDate);
+    dispatch(selectDate(newDate));
   }
 
   const renderMunicipi = (municipi) => {
@@ -65,10 +69,6 @@ const ComparaItem = (props) => {
 
   //Es guarden les dates de les que es disposa en prediccions i es mostra l'objecte amb aquestes prediccions.
   //Es podria fer un component per tenir els botons de dates en comptes de renderitzarlos aqui
-  const municipi = props.municipi;
-  const prediccions = props.prediccions[municipi.codi]; 
-  const selectedData = props.dates[municipi.codi]; 
-
   const municipiExists = (municipi !== undefined && municipi.codi !== undefined);
   const prediccionsExists = (prediccions !== undefined && prediccions.prediccions !== undefined);
   const dataExists = (selectedData !== undefined && selectedData.variables !== undefined);
@@ -106,8 +106,4 @@ const ComparaItem = (props) => {
 
 }
 
-const mapStateToProps = (state) => {
-  return { prediccions: state.prediccions, dates: state.dates }
-};
-
-export default connect( mapStateToProps, { predict, selectDate } )(ComparaItem);
+export default ComparaItem;

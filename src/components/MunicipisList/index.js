@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Municipi from '../Municipi';
 import { buildMunicipis, selectMunicipi, unselectMunicipi } from '../../actions';
 import history from '../../history';
@@ -10,23 +10,26 @@ import './styles.css';
 //Gestiona tota la logica de quins municipis es comparen i es mostren a la comparacio
 const MunicipisList = (props) => {
 
+  const municipis = useSelector(state => state.municipis);
+  const compared = useSelector(state => state.selected);
   useEffect( () => { getMunicipis() }, [] );
-  useEffect( () => { predictUrlMunicipis(props.codi1) }, [props.municipis, props.codi1] );
-  useEffect( () => { predictUrlMunicipis(props.codi2) }, [props.municipis, props.codi2] );
+  useEffect( () => { predictUrlMunicipis(props.codi1) }, [municipis, props.codi1] );
+  useEffect( () => { predictUrlMunicipis(props.codi2) }, [municipis, props.codi2] );
+  const dispatch = useDispatch();
 
   //Al haver carregat el component, s'extreu la llista de municipis del server
   const getMunicipis = () => {
-    props.buildMunicipis(); 
+    dispatch(buildMunicipis());
   }
 
   const predictUrlMunicipis = (codi) => {
-    if(typeof codi !== 'undefined' && props.municipis.length > 0 && !isBeingCompared(codi))
-      compareMunicipi(props.municipis.find(municipi => municipi.codi === codi));
+    if(typeof codi !== 'undefined' && municipis.length > 0 && !isBeingCompared(codi))
+      compareMunicipi(municipis.find(municipi => municipi.codi === codi));
   }
 
   //Funcio per deixar de comparar un municipi
   const removeMunicipi = async (codi) => {
-    await props.unselectMunicipi(codi);
+    await dispatch(unselectMunicipi(codi));
     
     let url = '';
 
@@ -41,8 +44,8 @@ const MunicipisList = (props) => {
 
   //S'afageix el municipi desitjat a l'objecte de comparacions, altre cop en un array hauria set mes senzill i entenedor
   const compareMunicipi = async (municipi) => {
-    if(props.compared.length <= 1){
-      await props.selectMunicipi(municipi);
+    if(compared.length <= 1){
+      await dispatch(selectMunicipi(municipi));
 
       let url = '';
 
@@ -58,21 +61,21 @@ const MunicipisList = (props) => {
   }
 
   const isBeingCompared = (codi) => {
-    const found = props.compared.find((compared) => { return compared.codi === codi});
+    const found = compared.find((compared) => { return compared.codi === codi});
     return found !== undefined;
   }
 
   return (
     <section className="municipisList">
       <ul className="row mt-3">
-      {props.municipis.map(municipi =>
+      {municipis.map(municipi =>
         <Municipi 
           key={municipi.codi} 
           municipi={municipi} 
           compareMunicipi={() => compareMunicipi(municipi)} 
           removeMunicipi={() => removeMunicipi(municipi.codi)} 
           compared={isBeingCompared(municipi.codi)} 
-          disabled={props.compared.length >= 2}/>
+          disabled={compared.length >= 2}/>
       )}
       </ul>
     </section>
@@ -80,11 +83,4 @@ const MunicipisList = (props) => {
 
 }
 
-const mapStateToProps = (state) => {
-  return { municipis: state.municipis, compared: state.selected }
-}
-
-export default connect(
-    mapStateToProps,
-    { buildMunicipis, selectMunicipi, unselectMunicipi }
-  )(MunicipisList);
+export default MunicipisList;
