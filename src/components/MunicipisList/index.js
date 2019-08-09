@@ -10,9 +10,9 @@ import './styles.css';
 //Gestiona tota la logica de quins municipis es comparen i es mostren a la comparacio
 const MunicipisList = (props) => {
 
-  useEffect( () => { getMunicipis(); }, [] );
-  useEffect( () => { predictUrlMunicipis(props.codi1); }, [props.municipis, props.codi1] );
-  useEffect( () => { predictUrlMunicipis(props.codi2); }, [props.municipis, props.codi2] );
+  useEffect( () => { getMunicipis() }, [] );
+  useEffect( () => { predictUrlMunicipis(props.codi1) }, [props.municipis, props.codi1] );
+  useEffect( () => { predictUrlMunicipis(props.codi2) }, [props.municipis, props.codi2] );
 
   //Al haver carregat el component, s'extreu la llista de municipis del server
   const getMunicipis = () => {

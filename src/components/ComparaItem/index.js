@@ -11,7 +11,7 @@ import './styles.css'
 //Gestiona el canvi de dates a partir de les dates extretes del servidor
 const ComparaItem = (props) => {
 
-  useEffect( () => { predictMunicipi(props.municipi); }, [props.municipi] );
+  useEffect( () => { predictMunicipi(props.municipi) }, [props.municipi] );
 
   //A l'actualitzar el municipi, si te municipi i no es el mateix que abans del canvi es demanen les prediccions al servidor
   const predictMunicipi = (municipi) => {
