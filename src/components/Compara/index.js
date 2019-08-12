@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
-import ComparaTags from '../ComparaTags'
+import ComparaTags from './ComparaTags'
 import ComparaItem from './ComparaItem'
 import './styles.css'
 
