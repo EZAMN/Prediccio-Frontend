@@ -5,4 +5,12 @@ body {
   background: #f6f7f8;
   color: #393c45; }
 
-  ul{list-style: none;padding:0;}
+ul{list-style: none;padding:0;}
+
+.Toastify__toast {
+  border-radius:4px;
+}
+
+.Toastify__toast-body {
+  font-size: 0.9em;
+}
