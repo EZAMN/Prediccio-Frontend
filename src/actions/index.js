@@ -37,19 +37,20 @@ export const buildMunicipis = () => { return async (dispatch) => {
     dispatch({
         type: BUILD_MUNICIPIS_REQUEST
     });
-
-    const {response, status} = await getMunicipis().catch(catchToast); 
-
-    if(status === 200){
+    
+    const promise = await getMunicipis().catch(catchToast); 
+    
+    if(typeof promise !== 'undefined' && promise.status === 200){
         dispatch({
             type: BUILD_MUNICIPIS_SUCCESS,
-            payload: response
+            payload: promise.response
         });
     }else{
         dispatch({
             type: BUILD_MUNICIPIS_FAIL
         });
-        catchToast(`${status}: ${response.error}`);
+        if(typeof promise === 'undefined') catchToast(`400: Cannot reach server`);
+        else catchToast(`${promise.status}: ${promise.response.error}`);
     }
 
 };};
@@ -60,18 +61,19 @@ export const predict = (codiMunicipi) => { return async (dispatch) => {
         type: PREDICT_MUNICIPI_REQUEST
     });
 
-    const  {response, status} = await getPrediccio(codiMunicipi).catch(catchToast); 
+    const  promise = await getPrediccio(codiMunicipi).catch(catchToast); 
 
-    if(status === 200){
+    if(typeof promise !== 'undefined' && promise.status === 200){
         dispatch({
             type: PREDICT_MUNICIPI_SUCCESS,
-            payload: response
+            payload: promise.response
         });
     }else{
         dispatch({
             type: PREDICT_MUNICIPI_FAIL
         });
-        catchToast(`${status}: ${response.error}`)
+        if(typeof promise === 'undefined') catchToast(`400: Cannot reach server`);
+        else catchToast(`${promise.status}: ${promise.response.error}`)
     }
 
 };};
