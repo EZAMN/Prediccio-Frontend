@@ -1,4 +1,4 @@
-import { SELECT_DATE, PREDICT_MUNICIPI, UNSELECT_MUNICIPI } from '../../actions/types';
+import { SELECT_DATE, PREDICT_MUNICIPI_SUCCESS, UNSELECT_MUNICIPI } from '../../actions/types';
 
 const selectDate = (state = {}, action) => {
 
@@ -7,7 +7,7 @@ const selectDate = (state = {}, action) => {
         case SELECT_DATE:
             return {...state, [action.payload.codi]: action.payload};
 
-        case PREDICT_MUNICIPI:
+        case PREDICT_MUNICIPI_SUCCESS:
             return {...state, [action.payload.codi]: action.payload.prediccions.dies[0]};
 
         case UNSELECT_MUNICIPI:

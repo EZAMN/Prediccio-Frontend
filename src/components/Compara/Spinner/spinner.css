@@ -1,0 +1,30 @@
+.spinner {
+  position:absolute;
+  display:block;
+  margin:45vh 10vw;
+  width:80vw;
+  height:10vh;
+  background:#fdfdfd;
+  left:0;
+  border-radius:10px;
+  border:1px solid #ccc;
+  padding-top:3vh;
+}
+
+.modalSpinner {
+  position:fixed;
+  display:block;
+  left:0;
+  top:0;
+  width:100vw;
+  height:100vh;
+  background: rgba(0, 0, 0, 0.3);
+  z-index:1;
+  animation: fadein 2s;
+}
+
+/* animation to skip micro loadings */
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
