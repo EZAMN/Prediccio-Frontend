@@ -24,7 +24,7 @@
     "style-loader": "^0.23.1"
   },
   "scripts": {
-    "start": "NODE_ENV=production react-scripts start",
+    "start": "NODE_ENV=developement react-scripts start",
     "build": "react-scripts build",
     "test": "./node_modules/mocha/bin/mocha --require babel-core/register src/test/components",
     "eject": "react-scripts eject"
