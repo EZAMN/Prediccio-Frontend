@@ -61,7 +61,7 @@ const MunicipisList = (props) => {
   }
 
   const isBeingCompared = (codi) => {
-    const found = compared.find((compared) => { return compared.codi === codi});
+    const found = compared.find((iCompared) => { return iCompared.codi === codi});
     return found !== undefined;
   }
 

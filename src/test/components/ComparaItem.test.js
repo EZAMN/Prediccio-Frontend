@@ -32,7 +32,7 @@ describe("ComparaItem", () => {
 
   it("always renders 6 lis inside the ul", () => {
     let lis = comparaItem().find("ul > li");
-    expect(lis.length).toBe(6);;
+    expect(lis.length).toBe(6);
   });
 
   it("shows the first li with 4 divs", () => {

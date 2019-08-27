@@ -27,7 +27,7 @@ describe("ComparaTags", () => {
 
   it("always renders 6 lis inside the ul", () => {
     let lis = comparaTags().find("ul").find("li");
-    expect(lis.length).toBe(6);;
+    expect(lis.length).toBe(6);
   });
 
   it("shows the first li empty", () => {

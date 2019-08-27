@@ -18,10 +18,10 @@ const ComparaItem = (props) => {
   const dispatch = useDispatch();
 
   //A l'actualitzar el municipi, si te municipi i no es el mateix que abans del canvi es demanen les prediccions al servidor
-  const predictMunicipi = (municipi) => {
+  const predictMunicipi = (oMunicipi) => {
 
-    if (typeof municipi.codi !== 'undefined') 
-          dispatch(predict(municipi.codi));
+    if (typeof oMunicipi.codi !== 'undefined') 
+          dispatch(predict(oMunicipi.codi));
 
   }
 
@@ -37,29 +37,29 @@ const ComparaItem = (props) => {
     dispatch(selectDate(newDate));
   }
 
-  const renderMunicipi = (municipi) => {
-    return [ municipi.nom, municipi.comarca.nom ];
+  const renderMunicipi = (oMunicipi) => {
+    return [ oMunicipi.nom, oMunicipi.comarca.nom ];
   }
 
   const renderValues = (variables) => {
 
-    const alt = nomImatge[variables.estatCel.simbol + 'alt']
-    const src = '/images/' + nomImatge[variables.estatCel.simbol]
-    const tmax = variables.tmax.valor + " " + variables.tmax.unitats;
-    const tmin = variables.tmin.valor + " " + variables.tmin.unitats;
-    const precipitacio = variables.precipitacio.valor + " " + variables.precipitacio.unitat;
+    const rAlt = nomImatge[variables.estatCel.simbol + 'alt']
+    const rSrc = '/images/' + nomImatge[variables.estatCel.simbol]
+    const rTmax = variables.tmax.valor + " " + variables.tmax.unitats;
+    const rTmin = variables.tmin.valor + " " + variables.tmin.unitats;
+    const rPrecipitacio = variables.precipitacio.valor + " " + variables.precipitacio.unitat;
     
-    return [ alt, src, tmax, tmin, precipitacio ]
+    return [ rAlt, rSrc, rTmax, rTmin, rPrecipitacio ]
   }
 
-  const renderPrediccions = (prediccions, selectedData) => {
+  const renderPrediccions = (oPrediccions, oSelectedData) => {
 
-    const botons = prediccions.dies.map( (prediccio) => {
+    const botons = oPrediccions.dies.map( (prediccio) => {
     
       return <DatesButton
         data={prediccio.data}
-        onClick={() => seleccionaData(prediccions.codi, prediccio)} 
-        disabled={ prediccio.data === selectedData.data } 
+        onClick={() => seleccionaData(oPrediccions.codi, prediccio)} 
+        disabled={ prediccio.data === oSelectedData.data } 
         />
 
     });

@@ -6,10 +6,8 @@
 
 .compare .wrapper ul li{
   background-color: #fff;
-  border-radius: 5px;
   overflow: hidden;
   box-shadow: 0 13px 21px -5px rgba(0, 0, 0, 0.05);
-  border: 1px solid #eee;
   font-size: 18px; 
   height:80px;
   margin: 0;

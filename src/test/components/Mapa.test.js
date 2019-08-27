@@ -32,12 +32,12 @@ describe("Mapa", () => {
 
   it("always renders a div inside a div", () => {
     let div = mapa().find("div div");
-    expect(div.length).toBe(1);;
+    expect(div.length).toBe(1);
   });
 
   it("always renders a iframe inside an div", () => {
     let iframes = mapa().find("div div iframe");
-    expect(iframes.length).toBe(1);;
+    expect(iframes.length).toBe(1);
   });
 
   it("correctly builds the src", () => {
