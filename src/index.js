@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import App from './containers/App';
-import history from './history';
 import store from './store';
 import 'bootstrap/dist/css/bootstrap.css';
 import './style.css';
@@ -13,9 +12,9 @@ import './style.css';
 const contenidor = document.getElementById('root');
 const aplicacio = (
   <Provider store={store}>
-    <Router history={history}>
-        <App />
-    </Router>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </Provider>
 );
 

@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Municipi from './Municipi';
 import { buildMunicipis, selectMunicipi, unselectMunicipi } from '../../actions';
-import history from '../../history';
 import './styles.css';
 
 
@@ -22,44 +21,37 @@ const MunicipisList = (props) => {
     dispatch(buildMunicipis());
   }
 
-  const predictUrlMunicipis = (codi) => {
+  //Funcio per actualitzar els municipis passats per la URL
+  const predictUrlMunicipis = async (codi) => {
     if(typeof codi !== 'undefined' && municipis.length > 0 && !isBeingCompared(codi))
-      compareMunicipi(municipis.find(municipi => municipi.codi === codi));
+      await compareMunicipi(municipis.find(municipi => municipi.codi === codi));
+
+    cleanupMunicipis();
+  }
+
+  //Funcio per netejar els municipis que ja no s'estan comparant
+  const cleanupMunicipis = () => {
+    Object.keys(compared).forEach( (municipi) => {
+      const codi = compared[municipi].codi;
+      if(codi !== props.codi1 && codi !== props.codi2){ 
+        removeMunicipi(codi) 
+      }
+    });
   }
 
   //Funcio per deixar de comparar un municipi
-  const removeMunicipi = async (codi) => {
-    await dispatch(unselectMunicipi(codi));
-    
-    let url = '';
-
-    if(typeof props.codi1 !== 'undefined' && codi !== props.codi1)
-      url = `/${props.codi1}`;
-
-    if(typeof props.codi2 !== 'undefined' && codi !== props.codi2)
-      url = `/${props.codi2}`;
-
-    history.push(url);
+  const removeMunicipi = (codi) => {
+    dispatch(unselectMunicipi(codi));
   }
 
   //S'afageix el municipi desitjat a l'objecte de comparacions, altre cop en un array hauria set mes senzill i entenedor
   const compareMunicipi = async (municipi) => {
-    if(compared.length <= 1){
-      await dispatch(selectMunicipi(municipi));
-
-      let url = '';
-
-      if(typeof props.codi1 !== 'undefined')
-        url = `/${props.codi1}`;
-
-      if(municipi.codi !== props.codi1){
-        url += `/${municipi.codi}`;
-        history.push(url);
-      }
-      
-    }
+    if(compared.length <= 1)
+      await dispatch(selectMunicipi(municipi)); 
+    
   }
 
+  //Funcio per determinar si un municipi esta essent comparat o no
   const isBeingCompared = (codi) => {
     const found = compared.find((iCompared) => { return iCompared.codi === codi});
     return found !== undefined;
@@ -72,10 +64,9 @@ const MunicipisList = (props) => {
         <Municipi 
           key={municipi.codi} 
           municipi={municipi} 
-          compareMunicipi={() => compareMunicipi(municipi)} 
-          removeMunicipi={() => removeMunicipi(municipi.codi)} 
           compared={isBeingCompared(municipi.codi)} 
-          disabled={compared.length >= 2}/>
+          disabled={compared.length >= 2}
+          currentUrl={{ codi1:props.codi1, codi2:props.codi2 }} />
       )}
       </ul>
     </section>
